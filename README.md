@@ -6,9 +6,12 @@ Use the programs to enumerate URLs using HackerOne's GraphQL API.
 
 DISCLAIMER:
 
+I hold no responsibility for how you use the gathered resources.
+
 May break at any time.
 
-Always verify the enumerate programs and URLs are in-scope before bug hunting.
+Always follow HackerOne rules and program specific rules.
+Always verify the enumerated programs and URLs are in-scope before bug hunting.
 
 Example Usages:
 
