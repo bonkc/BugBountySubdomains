@@ -4,29 +4,27 @@ import requests
 import json
 import tldextract
 
+programs = []
 
-def query (program):
-    url = "https://hackerone.com/graphql"
+def getHTML(url):
 
-    query = "query Team_assets($first_0:Int!) {query {\n    id,\n    ...F0\n  }\n}\nfragment F0 on Query {\n  _team:team(handle:\"" + program +"\") {\n    handle,    _structured_scopes:structured_scopes(first:$first_0,archived:false,eligible_for_submission:true) {\n      edges {\n        node {\n                   asset_type,\n          asset_identifier }     },\n   },\n   },\n  id\n}"
-    headers = {"X-Requested-With":"XMLHttpRequest", "accept": "application/json"}
-    html = requests.post(url, json = {"query":query,"variables":{"first_0":100,"first_1":50}}
-    , headers=headers)
-    try:
-        for d in html.json()["data"]["query"]["_team"]["_structured_scopes"]["edges"]:
-            if (d["node"]["asset_type"] == "URL"):
-                print (d["node"]["asset_identifier"].strip())
-    except Exception as e:
-        print ("error: " + str(e))
-        print(program + " program doesn't exist")
-        pass
+        headers = {"X-Requested-With":"XMLHttpRequest", "accept": "application/json"}
+        html = requests.get(url, headers=headers)
+        safe_html = (html.text).encode('cp850',errors='replace')
+        return (safe_html)
 
 
-if __name__ == '__main__':
-    try:
-        program = sys.argv[1]
-    except:
-        print ("Usage: python" + sys.argv[0] + " <program>")
-    query(program.strip()) 
-        
+def getPrograms(pages):
+    for x in range(1,pages):
+            res = getHTML("https://hackerone.com/programs/search?query=bounties%3Ayes&sort=published_at%3Adescending&page=" + str(x))
+            split = res.split(",")
+            #jhtml = json.loads(safe_html)
+            for parts in split:
+                if '"url"' in parts:
+                    programs.append((parts).split(":")[1].strip('"'))
 
+
+if __name__ == "__main__":
+    getPrograms(6)
+    for program in programs:
+        print (program.strip("/"))
