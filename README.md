@@ -1,8 +1,7 @@
 # BugBountySubdomains
 
-Gather programs from HackerOne using geth1programs.py
+Simple scripts to enumerate bug bounty programs and URLs/subdomains/hosts. Useful for information gathering and hunting. 
 
-Use the programs to enumerate URLs using HackerOne's GraphQL API.
 
 DISCLAIMER:
 
