@@ -5,6 +5,9 @@ import json
 import tldextract
 
 
+def cleanURL(url):
+    return ('.'.join(tldextract.extract(url.encode('cp850',errors='replace')))) 
+
 def query (program):
     url = "https://hackerone.com/graphql"
 
@@ -15,7 +18,7 @@ def query (program):
     try:
         for d in html.json()["data"]["query"]["_team"]["_structured_scopes"]["edges"]:
             if (d["node"]["asset_type"] == "URL"):
-                print (d["node"]["asset_identifier"].strip())
+                print cleanURL((d["node"]["asset_identifier"].strip()))
     except Exception as e:
         print ("error: " + str(e))
         print(program + " program doesn't exist")
@@ -27,6 +30,4 @@ if __name__ == '__main__':
         program = sys.argv[1]
     except:
         print ("Usage: python" + sys.argv[0] + " <program>")
-    query(program.strip()) 
-        
-
+    query(program.strip())
